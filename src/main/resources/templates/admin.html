@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Administration</title>
+    </head>
+    <body>
+
+        <h1>Administration</h1>
+        
+        <h2>All registration information for the event:</h2>
+
+        <ul>
+            <li th:each="registration : ${registrations}">
+                Name: <span th:text="${registration.name}">name</span>
+                Address: <span th:text="${registration.address}">address</span>
+            </li>
+        </ul>
+        
+    </body>
+</html>

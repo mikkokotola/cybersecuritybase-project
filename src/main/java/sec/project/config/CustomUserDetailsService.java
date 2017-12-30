@@ -4,14 +4,19 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private Map<String, String> accountDetails;
 
@@ -19,7 +24,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     public void init() {
         // this data would typically be retrieved from a database
         this.accountDetails = new TreeMap<>();
-        this.accountDetails.put("ted", "$2a$06$rtacOjuBuSlhnqMO2GKxW.Bs8J6KI0kYjw/gtF0bfErYgFyNTZRDm");
+        this.accountDetails.put("admin", passwordEncoder.encode("admin"));
+        this.accountDetails.put("jack", passwordEncoder.encode("24forever"));
+        this.accountDetails.put("bill", passwordEncoder.encode("groundhog"));
+        
     }
 
     @Override
@@ -37,4 +45,11 @@ public class CustomUserDetailsService implements UserDetailsService {
                 true,
                 Arrays.asList(new SimpleGrantedAuthority("USER")));
     }
+
+    public void saveNewUser(String username, String password) {
+        if (!this.accountDetails.containsKey(username)) {
+            this.accountDetails.put(username, passwordEncoder.encode(password));
+        }
+    }
+
 }
